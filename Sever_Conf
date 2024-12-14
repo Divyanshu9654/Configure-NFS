@@ -1,0 +1,44 @@
+NFS (Network File System) Using this a user on the client computer can access the files on the server side like as they are accessing locally.
+Developed by Sun Microsystem (SUN) in 1984.
+
+<-- Configure Server Side --> 
+Install nfs Package 
+#  dnf install nfs-utils -y
+
+Start and enable nfs service 
+# systemctl enable --now nfs-server.service 
+#  systemctl enable --now nfs-server.service
+
+To Verify nfs port are working.
+# rpcinfo -p | grep nfs 
+Port- 2049
+
+Create a shared dir in the server for the shared client machine 
+#  mkdir -p /mnt/server_dir
+
+Change ownership of server_dir nobody
+# chown -R nobody: /mnt/server_dir/
+
+Make Full permission Server_dir anyone can create and edit in dir 
+# chmod -R 777 /mnt/server_dir/
+
+Restart nfs-utils service 
+# systemctl restart nfs-utils.service
+
+To Configure share so that client-server is accessible 
+# vim /etc/exports
+     /mnt/server_dir/ 103.133.214.1/24(rw,sync,no_all_squash,root_squash)
+                        |_ client_server IP 
+
+Export the Share Create 
+# exportfs -arv
+
+Allow NFS in the firewall 
+# firewall-cmd --permanent --add-service=nfs
+# firewall-cmd --permanent --add-service=rpc-bind   -- rpc bind redirection client to proper port 
+# firewall-cmd --permanent --add-service=mountd     -  nfs allow to host so that client mount & interact locally
+# firewall-cmd --reload
+# firewall-cmd --list-all
+
+
+
