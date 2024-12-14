@@ -1,0 +1,2 @@
+# dnf install nfs-utils nfs4-acl-tools -y
+# showmount -e 103.133.214.18
